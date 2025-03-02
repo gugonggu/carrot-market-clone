@@ -32,7 +32,7 @@ const Login = () => {
           errors={state?.fieldErrors.password}
           minLength={PASSWORD_MIN_LENGTH}
         />
-        <Button text="Create Account" />
+        <Button text="로그인" />
       </form>
       <SocialLogin />
     </div>
