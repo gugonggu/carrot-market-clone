@@ -38,7 +38,7 @@ const SMSLogin = () => {
             errors={state?.error?.formErrors}
           />
         )}
-        <Button text={state?.token ? "토근 인증하기" : "인증 문자 보내기"} />
+        <Button text={state?.token ? "토큰 인증하기" : "인증 문자 보내기"} />
       </form>
     </div>
   );

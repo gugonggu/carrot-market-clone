@@ -9,7 +9,7 @@ const SocialLogin = () => {
       <div className="flex flex-col gap-3">
         <Link
           className="flex items-center justify-center h-10 gap-3 primary-btn"
-          href="/gitgub/start"
+          href="/github/start"
         >
           <span>
             <FaGithub className="size-6" />
