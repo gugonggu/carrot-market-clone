@@ -1,22 +1,31 @@
 "use client";
 
+import { createAccrount } from "@/app/(auth)/create-account/actions";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import SocialLogin from "@/components/social-login";
-import { login } from "@/app/login/actions";
-import { useActionState } from "react";
 import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
+import { useActionState } from "react";
 
-const Login = () => {
-  const [state, action] = useActionState(login, null);
+const CreateAccount = () => {
+  const [state, action] = useActionState(createAccrount, null);
 
   return (
     <div className="flex flex-col gap-10 px-6 py-8">
       <div className="flex flex-col gap-2 *:font-medium">
         <h1 className="text-2xl">안녕하세요!</h1>
-        <h2 className="text-xl">Log in with email and password!</h2>
+        <h2 className="text-xl">Fill in the form below to join!</h2>
       </div>
       <form action={action} className="flex flex-col gap-3">
+        <Input
+          name="username"
+          type="text"
+          placeholder="Username"
+          required
+          errors={state?.fieldErrors.username}
+          minLength={3}
+          maxLength={10}
+        />
         <Input
           name="email"
           type="email"
@@ -32,10 +41,18 @@ const Login = () => {
           errors={state?.fieldErrors.password}
           minLength={PASSWORD_MIN_LENGTH}
         />
-        <Button text="로그인" />
+        <Input
+          name="confirm_password"
+          type="password"
+          placeholder="Confirm Password"
+          required
+          errors={state?.fieldErrors.confirm_password}
+          minLength={PASSWORD_MIN_LENGTH}
+        />
+        <Button text="Create Account" />
       </form>
       <SocialLogin />
     </div>
   );
 };
-export default Login;
+export default CreateAccount;
