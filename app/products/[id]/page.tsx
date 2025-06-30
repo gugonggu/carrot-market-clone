@@ -5,12 +5,13 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { unstable_cache as nextCache } from "next/cache";
 
 const getIsOwner = async (userId: number) => {
-  const session = await getSession();
-  if (session.id) {
-    return session.id === userId;
-  }
+  // const session = await getSession();
+  // if (session.id) {
+  //   return session.id === userId;
+  // }
   return false;
 };
 
@@ -31,13 +32,45 @@ const getProduct = async (id: number) => {
   return product;
 };
 
+const getChchedProduct = nextCache(getProduct, ["product-detail"], {
+  tags: ["product-detail"],
+});
+
+const getProductTitle = async (id: number) => {
+  const product = await db.product.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      title: true,
+    },
+  });
+  return product;
+};
+
+const getCachedProductTitle = nextCache(getProductTitle, ["product-title"], {
+  tags: ["product-title"],
+});
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string };
+}) => {
+  const product = await getCachedProductTitle(Number(params.id));
+
+  return {
+    title: product?.title,
+  };
+};
+
 const ProductDetail = async ({ params }: { params: { id: string } }) => {
   const id = Number(params.id);
   if (isNaN(id)) {
     return notFound();
   }
 
-  const product = await getProduct(id);
+  const product = await getChchedProduct(id);
 
   if (!product) {
     return notFound();
@@ -56,7 +89,7 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
         />
       </div>
       <div className="flex items-center gap-3 p-5 border-b border-neutral-700">
-        <div className="rounded-full size-10 overflow-hidden">
+        <div className="overflow-hidden rounded-full size-10">
           {product.user.avatar !== null ? (
             <Image
               src={product.user.avatar}
@@ -96,3 +129,12 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
   );
 };
 export default ProductDetail;
+
+export const generateStaticParams = async () => {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+    },
+  });
+  return products.map((product) => ({ id: product.id + "" }));
+};

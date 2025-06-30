@@ -52,14 +52,14 @@ const ProductList = ({ initialProducts }: ProductListProps) => {
       {products.map((product) => (
         <ListProduct key={product.id} {...product} />
       ))}
-      {!isLastPage ? (
+      {/* {!isLastPage ? (
         <span
           ref={trigger}
           className="px-3 py-2 mx-auto text-sm font-semibold bg-orange-500 rounded-md w-fit hover:opacity-90 active:scale-95"
         >
           {isLoading ? "로딩 중" : "더보기"}
         </span>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };
