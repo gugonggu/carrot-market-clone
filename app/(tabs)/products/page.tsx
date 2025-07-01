@@ -33,7 +33,7 @@ export const metadata = {
   title: "Products",
 };
 
-export const ravalidate = 60;
+export const revalidate = 60;
 
 const Products = async () => {
   const initialProducts = await getCachedProducts();
