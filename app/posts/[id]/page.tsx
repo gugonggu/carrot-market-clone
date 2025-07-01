@@ -1,12 +1,15 @@
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { formatToTimeAgo } from "@/lib/utils";
-import { EyeIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
-import { HandThumbUpIcon as OutlineHandThumbUpIcon } from "@heroicons/react/24/outline";
-import { unstable_cache as nextCache, revalidateTag } from "next/cache";
+import { EyeIcon } from "@heroicons/react/24/solid";
+import { unstable_cache as nextCache } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import LikeButton from "@/components/like-button";
+
+type PostDetailProps = {
+  params: Promise<{ id: string }>;
+};
 
 const getPost = async (id: number) => {
   try {
@@ -73,19 +76,21 @@ async function getCachedLikeStatus(postId: number, userId: number) {
   return cachedOperation(postId);
 }
 
-const PostDetail = async ({ params }: { params: { id: string } }) => {
-  const id = Number(params.id);
-  if (isNaN(id)) {
+const PostDetail = async ({ params }: PostDetailProps) => {
+  const { id } = await params;
+  // const id = await Number(params.id);
+  const numId = Number(id);
+  if (isNaN(numId)) {
     return notFound();
   }
 
-  const post = await getCachedPost(id);
+  const post = await getCachedPost(numId);
   if (!post) {
     return notFound();
   }
 
   const session = await getSession();
-  const { likeCount, isLiked } = await getCachedLikeStatus(id, session.id!);
+  const { likeCount, isLiked } = await getCachedLikeStatus(numId, session.id!);
 
   return (
     <div className="p-5 text-white">
@@ -112,7 +117,7 @@ const PostDetail = async ({ params }: { params: { id: string } }) => {
           <EyeIcon className="size-5" />
           <span>조회 {post.views}</span>
         </div>
-        <LikeButton isLiked={isLiked} likeCount={likeCount} postId={id} />
+        <LikeButton isLiked={isLiked} likeCount={likeCount} postId={numId} />
       </div>
     </div>
   );
