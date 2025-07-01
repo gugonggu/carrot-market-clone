@@ -6,10 +6,6 @@ import { notFound, redirect } from "next/navigation";
 import { unstable_cache as nextCache } from "next/cache";
 import getSession from "@/lib/session";
 
-type ProductDetailProps = {
-  params: { id: string };
-};
-
 const getIsOwner = async (userId: number) => {
   // const session = await getSession();
   // if (session.id) {
@@ -67,15 +63,13 @@ export const generateMetadata = async ({
   };
 };
 
-const ProductDetail = async ({ params }: any) => {
-  const { id } = params as { id: string };
-  const numId = Number(id);
-
-  if (isNaN(numId)) {
+const ProductDetail = async ({ params }: { params: { id: string } }) => {
+  const id = Number(params.id);
+  if (isNaN(id)) {
     return notFound();
   }
 
-  const product = await getChchedProduct(numId);
+  const product = await getChchedProduct(id);
 
   if (!product) {
     return notFound();
@@ -159,7 +153,7 @@ const ProductDetail = async ({ params }: any) => {
 };
 export default ProductDetail;
 
-export const generateStaticParams = async (): Promise<{ id: string }[]> => {
+export const generateStaticParams = async () => {
   const products = await db.product.findMany({
     select: {
       id: true,
