@@ -7,7 +7,7 @@ import { unstable_cache as nextCache } from "next/cache";
 import getSession from "@/lib/session";
 
 type ProductDetailProps = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
 const getIsOwner = async (userId: number) => {
@@ -67,7 +67,7 @@ export const generateMetadata = async ({
   };
 };
 
-const ProductDetail = async ({ params }: any) => {
+const ProductDetail = async ({ params }: ProductDetailProps) => {
   const { id } = await params;
   const numId = Number(id);
 
