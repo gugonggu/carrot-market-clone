@@ -4,6 +4,8 @@ import getSession from "@/lib/session";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
 
+type PageParams = Promise<{ id: string }>;
+
 const getRoom = async (id: string) => {
   const room = await db.chatRoom.findUnique({
     where: {
@@ -67,7 +69,7 @@ const getUserProfile = async () => {
 
 export type InitialChatMessages = Prisma.PromiseReturnType<typeof getMessages>;
 
-const ChatRoom = async ({ params }: { params: Promise<{ id: string }> }) => {
+const ChatRoom = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
   const room = await getRoom(id);
