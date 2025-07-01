@@ -67,7 +67,7 @@ export const generateMetadata = async ({
   };
 };
 
-const ProductDetail = async ({ params }: ProductDetailProps) => {
+const ProductDetail = async ({ params }: any) => {
   const { id } = await params;
   const numId = Number(id);
 
