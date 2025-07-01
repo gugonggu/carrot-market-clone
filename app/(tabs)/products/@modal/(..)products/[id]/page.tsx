@@ -3,7 +3,7 @@
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 
-const Modal = ({ params }: { params: { id: string } }) => {
+const Modal = () => {
   const router = useRouter();
   const onCloseCLick = () => {
     router.back();
