@@ -67,8 +67,8 @@ export const generateMetadata = async ({
   };
 };
 
-const ProductDetail = async ({ params }: ProductDetailProps) => {
-  const { id } = params;
+const ProductDetail = async ({ params }: any) => {
+  const { id } = params as { id: string };
   const numId = Number(id);
 
   if (isNaN(numId)) {
