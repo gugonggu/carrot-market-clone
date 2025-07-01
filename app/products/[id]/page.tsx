@@ -159,7 +159,7 @@ const ProductDetail = async ({ params }: any) => {
 };
 export default ProductDetail;
 
-export const generateStaticParams = async () => {
+export const generateStaticParams = async (): Promise<{ id: string }[]> => {
   const products = await db.product.findMany({
     select: {
       id: true,
